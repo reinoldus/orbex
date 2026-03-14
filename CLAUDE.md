@@ -13,6 +13,9 @@
 - Nuxt UI v4 (`@nuxt/ui` 4.5.1) — only Nuxt UI components allowed for UI
 - Tailwind CSS 4
 - pnpm
+- **Deployment**: Cloudflare Pages (Nitro `cloudflare_pages` preset)
+- **Database**: Cloudflare D1 (serverless SQLite) — binding name `DB`
+- **Local dev**: `nitro-cloudflare-dev` module for Cloudflare binding emulation
 
 ## Design
 - Dark SaaS style: deep navy background (`#070e24`) with cyan/teal accents
@@ -27,6 +30,18 @@
 3. Product Preview — WhatsApp mockup (primary) + Dashboard mockup (secondary)
 4. Benefits — 3 cards (reply from WhatsApp, always informed, grow reputation)
 5. Early Access — signup form (name, email, business name)
+
+## Backend
+- Server routes in `server/api/` — auto-handled by Nitro
+- D1 accessed via `event.context.cloudflare.env.DB` (Nitro v2 / Nuxt 4 API)
+- Wrangler config in `wrangler.toml` (includes `pages_build_output_dir = "dist"`)
+- D1 migrations in `migrations/` — apply with `npx wrangler d1 migrations apply orbex-db`
+- TypeScript types for Cloudflare bindings in `env.d.ts`
+
+## Build & Deploy
+- Build: `pnpm build`
+- Deploy: `npx wrangler pages deploy`
+- Preview locally: `npx wrangler pages dev dist`
 
 ## Rules
 - **Positive tone only** — no fear-based or negative framing in copy
