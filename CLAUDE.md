@@ -42,6 +42,8 @@
 - Build: `pnpm build`
 - Deploy: `npx wrangler pages deploy`
 - Preview locally: `npx wrangler pages dev dist`
+- **CI**: GitHub Actions (`.github/workflows/deploy.yml`) — auto-deploys to Cloudflare Pages on push to `main`
+- CI requires two repo secrets: `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`
 
 ## Rules
 - **Positive tone only** — no fear-based or negative framing in copy
