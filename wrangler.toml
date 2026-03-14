@@ -1,0 +1,8 @@
+name = "orbex"
+compatibility_date = "2025-07-15"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "orbex-db"
+database_id = "3941861f-bb22-4e02-bfa5-9511dd30cd3c"
