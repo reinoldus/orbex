@@ -5,6 +5,10 @@ const form = reactive({
   business: ''
 })
 
+const toast = useToast()
+const loading = ref(false)
+const submitted = ref(false)
+
 const benefits = [
   {
     title: 'Reply from WhatsApp',
@@ -35,8 +39,20 @@ const reviews = [
   { name: 'Lisa T.', rating: 5, text: 'Best salon in town! Love the attention to detail and the warm atmosphere.', time: '1 day ago' }
 ]
 
-function onSubmit() {
-  // TODO: handle form submission
+async function onSubmit() {
+  loading.value = true
+  try {
+    await $fetch('/api/waitlist', { method: 'POST', body: form })
+    submitted.value = true
+    toast.add({ title: 'You\'re on the list!', description: 'We\'ll reach out when your spot is ready.', color: 'success' })
+  } catch (err: any) {
+    const message = err.statusCode === 409
+      ? 'This email is already on the waitlist'
+      : 'Something went wrong. Please try again.'
+    toast.add({ title: message, color: 'error' })
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 
@@ -280,7 +296,7 @@ function onSubmit() {
     >
       <UContainer :ui="{ base: 'max-w-md mx-auto' }">
         <UCard :ui="{ root: 'early-access-card rounded-2xl shadow-2xl', body: 'p-8 sm:p-10' }">
-          <UForm :state="form" @submit="onSubmit" class="space-y-6">
+          <UForm v-if="!submitted" :state="form" @submit="onSubmit" class="space-y-6">
             <UFormField label="Your name" name="name" :ui="{ label: 'text-slate-300 text-sm font-medium' }">
               <UInput v-model="form.name" placeholder="Jane Smith" icon="i-lucide-user" size="xl" :ui="{ root: 'w-full bg-white/[0.04] border-white/10 focus-within:border-cyan-500/40 focus-within:ring-cyan-500/20 rounded-lg' }" />
             </UFormField>
@@ -293,10 +309,16 @@ function onSubmit() {
               <UInput v-model="form.business" placeholder="Your salon or clinic name" icon="i-lucide-building-2" size="xl" :ui="{ root: 'w-full bg-white/[0.04] border-white/10 focus-within:border-cyan-500/40 focus-within:ring-cyan-500/20 rounded-lg' }" />
             </UFormField>
 
-            <UButton type="submit" label="Get Early Access" icon="i-lucide-sparkles" size="xl" block trailing-icon="i-lucide-arrow-right" class="mt-2" />
+            <UButton type="submit" label="Get Early Access" icon="i-lucide-sparkles" size="xl" block trailing-icon="i-lucide-arrow-right" class="mt-2" :loading="loading" />
           </UForm>
 
-          <p class="text-slate-600 text-xs text-center mt-5">No credit card required. We'll reach out when your spot is ready.</p>
+          <div v-else class="text-center py-6">
+            <UIcon name="i-lucide-check-circle" class="size-12 text-emerald-400 mx-auto mb-4" />
+            <p class="text-white font-semibold text-lg">You're on the list!</p>
+            <p class="text-slate-400 text-sm mt-2">We'll reach out when your spot is ready.</p>
+          </div>
+
+          <p v-if="!submitted" class="text-slate-600 text-xs text-center mt-5">No credit card required. We'll reach out when your spot is ready.</p>
         </UCard>
       </UContainer>
     </UPageSection>

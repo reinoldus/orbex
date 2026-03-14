@@ -2,10 +2,13 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxt/ui'],
+  modules: ['@nuxt/ui', 'nitro-cloudflare-dev'],
   css: ['~/assets/css/main.css'],
   colorMode: {
     preference: 'dark',
     fallback: 'dark'
+  },
+  nitro: {
+    preset: 'cloudflare_pages'
   }
 })
