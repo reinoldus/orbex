@@ -1,16 +1,16 @@
 export default defineEventHandler(async (event) => {
-  const { name, email, business } = await readBody(event)
+  const { email } = await readBody(event)
 
-  if (!name || !email || !business) {
-    throw createError({ statusCode: 400, statusMessage: 'All fields are required' })
+  if (!email) {
+    throw createError({ statusCode: 400, statusMessage: 'Email is required' })
   }
 
   const { cloudflare } = event.context
   const db = cloudflare.env.DB
 
   try {
-    await db.prepare('INSERT INTO waitlist (name, email, business) VALUES (?, ?, ?)')
-      .bind(name, email, business)
+    await db.prepare('INSERT INTO waitlist (email) VALUES (?)')
+      .bind(email)
       .run()
   } catch (err: any) {
     if (err.message?.includes('UNIQUE constraint failed')) {

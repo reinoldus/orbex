@@ -1,8 +1,6 @@
 <script setup lang="ts">
 const form = reactive({
-  name: '',
-  email: '',
-  business: ''
+  email: ''
 })
 
 const toast = useToast()
@@ -297,16 +295,8 @@ async function onSubmit() {
       <UContainer :ui="{ base: 'max-w-md mx-auto' }">
         <UCard :ui="{ root: 'early-access-card rounded-2xl shadow-2xl', body: 'p-8 sm:p-10' }">
           <UForm v-if="!submitted" :state="form" @submit="onSubmit" class="space-y-6">
-            <UFormField label="Your name" name="name" :ui="{ label: 'text-slate-300 text-sm font-medium' }">
-              <UInput v-model="form.name" placeholder="Jane Smith" icon="i-lucide-user" size="xl" :ui="{ root: 'w-full bg-white/[0.04] border-white/10 focus-within:border-cyan-500/40 focus-within:ring-cyan-500/20 rounded-lg' }" />
-            </UFormField>
-
             <UFormField label="Email address" name="email" :ui="{ label: 'text-slate-300 text-sm font-medium' }">
               <UInput v-model="form.email" type="email" placeholder="jane@yoursalon.com" icon="i-lucide-mail" size="xl" :ui="{ root: 'w-full bg-white/[0.04] border-white/10 focus-within:border-cyan-500/40 focus-within:ring-cyan-500/20 rounded-lg' }" />
-            </UFormField>
-
-            <UFormField label="Business name" name="business" :ui="{ label: 'text-slate-300 text-sm font-medium' }">
-              <UInput v-model="form.business" placeholder="Your salon or clinic name" icon="i-lucide-building-2" size="xl" :ui="{ root: 'w-full bg-white/[0.04] border-white/10 focus-within:border-cyan-500/40 focus-within:ring-cyan-500/20 rounded-lg' }" />
             </UFormField>
 
             <UButton type="submit" label="Get Early Access" icon="i-lucide-sparkles" size="xl" block trailing-icon="i-lucide-arrow-right" class="mt-2" :loading="loading" />
